@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>YouMovin — Landing (conceito)</title>
+
+  <style>
+    :root{
+      --blue-900:#0B2A4A;
+      --blue-700:#123A66;
+      --blue-600:#1E5AA8;
+
+      --green-500:#2ECC71;
+      --green-700:#1F8A4C;
+
+      --earth-600:#8A5A3C;
+
+      --bg:#F6F8FB;
+      --card:#FFFFFF;
+      --text:#0B1220;
+      --muted:#5B6B82;
+      --line:#E6EDF7;
+
+      --radius:18px;
+      --shadow:0 14px 34px rgba(11,42,74,.14);
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:linear-gradient(180deg,#fff 0%, var(--bg) 60%);
+    }
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:1120px; margin:0 auto; padding:0 20px}
+
+    /* NAV */
+    .nav{
+      position:fixed; top:0; left:0; right:0; z-index:60;
+      background:rgba(255,255,255,.84);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid var(--line);
+    }
+    .nav-inner{
+      display:flex; justify-content:space-between; align-items:center;
+      padding:14px 0;
+    }
+    .logo{display:flex; align-items:center; gap:10px; font-weight:900}
+    .mark{
+      width:34px; height:34px; border-radius:12px;
+      background: conic-gradient(from 210deg, var(--green-500), var(--blue-600), var(--blue-900));
+      box-shadow:0 12px 26px rgba(30,90,168,.22);
+    }
+    .links{display:flex; gap:16px; color:var(--muted); font-weight:750}
+    @media(max-width:980px){ .links{display:none} }
+
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:12px 14px; border-radius:14px; font-weight:900;
+      border:1px solid transparent; cursor:pointer;
+      transition:.15s transform ease, .15s opacity ease;
+      white-space:nowrap;
+    }
+    .btn:hover{transform:translateY(-1px); opacity:.96}
+    .btn.primary{background:var(--blue-600); color:#fff}
+    .btn.cta{background:var(--green-500); color:#052012}
+    .btn.ghost{background:#fff; border-color:var(--line); color:var(--text)}
+
+    /* HERO FULL SCREEN */
+    .hero{
+      position:relative;
+      width:100vw;
+      height:100vh;
+      overflow:hidden;
+      padding-top:64px; /* espaço da nav fixa */
+
+      background:
+        linear-gradient(
+          90deg,
+          rgba(11,42,74,.90) 0%,
+          rgba(11,42,74,.65) 42%,
+          rgba(11,42,74,.12) 78%,
+          rgba(11,42,74,0) 100%
+        ),
+        url("https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=2200&q=70");
+      background-size:cover;
+      background-position:center right;
+    }
+    .hero::after{
+      content:"";
+      position:absolute; top:-18%; right:-10%;
+      width:640px; height:140%;
+      background:linear-gradient(135deg, rgba(46,204,113,.55), rgba(30,90,168,.45));
+      transform:skewX(-12deg);
+      border-radius:60px;
+      z-index:1;
+      opacity:.72;
+    }
+    .hero::before{
+      content:"";
+      position:absolute; bottom:-38%; right:20%;
+      width:540px; height:540px;
+      background:rgba(46,204,113,.22);
+      transform:rotate(25deg);
+      border-radius:40px;
+      z-index:0;
+    }
+    .hero-content{
+      position:relative; z-index:2;
+      height:calc(100% - 64px);
+      display:flex;
+      align-items:center;
+      padding-left:8vw;
+      max-width:760px;
+    }
+    .kicker{
+      display:inline-flex; gap:8px; align-items:center;
+      font-weight:900; font-size:13px;
+      color:#D7FBE7;
+      background: rgba(46,204,113,.14);
+      border:1px solid rgba(46,204,113,.24);
+      padding:8px 10px; border-radius:999px;
+    }
+    h1{
+      margin:14px 0 10px;
+      font-size:clamp(38px,4.2vw,58px);
+      line-height:1.04;
+      color:#fff;
+      letter-spacing:-.3px;
+    }
+    .lead{
+      margin:0;
+      color:rgba(255,255,255,.84);
+      font-weight:650;
+      line-height:1.55;
+      font-size:18px;
+      max-width:52ch;
+    }
+
+    .hero-actions{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px; border-radius:999px;
+      background: rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.18);
+      color:#fff; font-weight:850;
+    }
+
+    /* Busca */
+    .search{
+      margin-top:18px;
+      display:grid; gap:10px;
+      grid-template-columns: 1.2fr .9fr .9fr .8fr;
+      background:rgba(255,255,255,.92);
+      border:1px solid rgba(255,255,255,.55);
+      padding:12px; border-radius:18px;
+    }
+    label{display:block; font-size:12px; color:var(--muted); font-weight:900; margin-bottom:6px}
+    input,select{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      font-weight:750;
+      outline:none;
+      background:#fff;
+    }
+    input:focus,select:focus{border-color:rgba(30,90,168,.45); box-shadow:0 0 0 4px rgba(30,90,168,.10)}
+    .search .btn{width:100%}
+
+    @media(max-width:900px){
+      .hero-content{padding:0 24px; max-width:100%}
+      .search{grid-template-columns:1fr}
+      .hero::after{right:-45%}
+    }
+
+    /* SEÇÕES */
+    main{padding:26px 0}
+    section{padding:26px 0}
+    .section-title{display:flex; justify-content:space-between; align-items:end; gap:12px; margin-bottom:12px}
+    .section-title h2{margin:0; font-size:22px}
+    .sub{margin:6px 0 0; color:var(--muted); font-weight:650; line-height:1.5}
+
+    .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
+    .grid-2{display:grid; grid-template-columns:repeat(2,1fr); gap:14px}
+    @media(max-width:900px){ .grid-3,.grid-2{grid-template-columns:1fr} }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:16px;
+      box-shadow: 0 10px 26px rgba(11,42,74,.08);
+    }
+    .tag{
+      display:inline-flex; padding:6px 10px; border-radius:999px;
+      font-size:12px; font-weight:950;
+      background: rgba(46,204,113,.14);
+      color:#0B5A34;
+    }
+    .tag.blue{background:rgba(30,90,168,.12); color:var(--blue-900)}
+    .tag.earth{background:rgba(138,90,60,.14); color:#4A2B1A}
+    .meta{color:var(--muted); font-weight:700; font-size:14px}
+    .divider{height:1px; background:var(--line); margin:12px 0}
+
+    .icon{
+      width:42px; height:42px; border-radius:14px;
+      background: rgba(30,90,168,.10);
+      display:flex; align-items:center; justify-content:center;
+      color: var(--blue-900); font-weight:1000;
+    }
+
+    /* CTA FINAL */
+    .cta-box{
+      background:
+        radial-gradient(900px 450px at 10% 0%, rgba(46,204,113,.18), transparent 60%),
+        radial-gradient(900px 450px at 90% 0%, rgba(30,90,168,.18), transparent 60%),
+        #fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow: var(--shadow);
+      padding:22px;
+      display:flex; justify-content:space-between; align-items:center; gap:14px;
+      flex-wrap:wrap;
+    }
+
+    /* FAQ */
+    details{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px 14px;
+    }
+    summary{cursor:pointer; font-weight:900}
+    details p{margin:10px 0 0; color:var(--muted); font-weight:650; line-height:1.5}
+
+    footer{
+      padding:26px 0 40px;
+      border-top:1px solid var(--line);
+      color:var(--muted);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="nav">
+    <div class="wrap nav-inner">
+      <div class="logo"><div class="mark"></div> YouMovin</div>
+
+      <nav class="links" aria-label="Menu">
+        <a href="#beneficios">Benefícios</a>
+        <a href="#eventos">Eventos</a>
+        <a href="#como">Como funciona</a>
+        <a href="#organizadores">Organizadores</a>
+        <a href="#faq">Dúvidas</a>
+      </nav>
+
+      <div style="display:flex; gap:10px">
+        <a class="btn ghost" href="#organizadores">Sou organizador</a>
+        <a class="btn primary" href="#eventos">Ver eventos</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO FULL SCREEN -->
+  <header class="hero">
+    <div class="hero-content">
+      <div>
+        <span class="kicker">🏃 Plataforma de corridas • calendário • inscrições</span>
+
+        <h1>Encontre sua próxima corrida<br>e inscreva‑se com confiança</h1>
+
+        <p class="lead">
+          Uma experiência focada em clareza e velocidade: menos fricção,
+          mais inscrições e mais confiança na plataforma.
+        </p>
+
+        <div class="search" role="search" aria-label="Buscar eventos">
+          <div>
+            <label>Cidade / Região</label>
+            <input placeholder="Ex.: Porto Alegre - RS" />
+          </div>
+          <div>
+            <label>Modalidade</label>
+            <select>
+              <option>Corrida</option>
+              <option>Trail</option>
+              <option>Caminhada</option>
+              <option>Ciclismo</option>
+            </select>
+          </div>
+          <div>
+            <label>Mês</label>
+            <select>
+              <option>Próximos meses</option>
+              <option>Fevereiro</option>
+              <option>Março</option>
+              <option>Abril</option>
+            </select>
+          </div>
+          <div style="display:flex; align-items:end">
+            <button class="btn cta">Buscar eventos</button>
+          </div>
+        </div>
+
+        <div class="hero-actions">
+          <span class="pill">✅ Inscrições seguras</span>
+          <span class="pill">📍 Eventos por região</span>
+          <span class="pill">⭐ Destaques da semana</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <!-- BENEFÍCIOS -->
+    <section id="beneficios">
+      <div class="section-title">
+        <div>
+          <h2>Por que a nova experiência converte melhor</h2>
+          <p class="sub">Foco em clareza, hierarquia visual e jornada simples até a inscrição.</p>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="icon">✓</div>
+          <h3 style="margin:10px 0 6px">Proposta clara em 5 segundos</h3>
+          <p class="meta" style="margin:0">O usuário entende o que a plataforma oferece logo no primeiro contato.</p>
+        </div>
+        <div class="card">
+          <div class="icon">⚡</div>
+          <h3 style="margin:10px 0 6px">Menos fricção para se inscrever</h3>
+          <p class="meta" style="margin:0">CTAs evidentes, passos reduzidos e feedback para cada ação.</p>
+        </div>
+        <div class="card">
+          <div class="icon">★</div>
+          <h3 style="margin:10px 0 6px">Mais confiança</h3>
+          <p class="meta" style="margin:0">Prova social, mensagens claras e consistência visual reforçam credibilidade.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- EVENTOS -->
+    <section id="eventos">
+      <div class="section-title">
+        <div>
+          <h2>Eventos em destaque</h2>
+          <p class="sub">O essencial acima da dobra: data, local, distância e CTA.</p>
+        </div>
+        <a class="btn ghost" href="#">Ver todos</a>
+      </div>
+
+      <div class="grid-3">
+        <article class="card">
+          <span class="tag">Inscrições abertas</span>
+          <h3 style="margin:10px 0 6px">Corrida Urbana • 5K / 10K</h3>
+          <div class="meta">📅 17 Fev • 📍 Porto Alegre/RS</div>
+          <div class="divider"></div>
+          <a class="btn cta" href="#" style="width:100%">Inscrever-se</a>
+        </article>
+
+        <article class="card">
+          <span class="tag blue">Em breve</span>
+          <h3 style="margin:10px 0 6px">Trail Run • Serra</h3>
+          <div class="meta">📅 03 Mar • 📍 Canela/RS</div>
+          <div class="divider"></div>
+          <a class="btn primary" href="#" style="width:100%">Ver detalhes</a>
+        </article>
+
+        <article class="card">
+          <span class="tag earth">Recomendado</span>
+          <h3 style="margin:10px 0 6px">Desafio Regional • 15K</h3>
+          <div class="meta">📅 24 Mar • 📍 Gravataí/RS</div>
+          <div class="divider"></div>
+          <a class="btn ghost" href="#" style="width:100%">Salvar evento</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- COMO FUNCIONA -->
+    <section id="como">
+      <div class="section-title">
+        <div>
+          <h2>Como funciona</h2>
+          <p class="sub">Uma jornada curta e previsível (menos dúvidas, menos abandono).</p>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="icon">1</div>
+          <h3 style="margin:10px 0 6px">Descubra</h3>
+          <p class="meta" style="margin:0">Busque por cidade, mês e modalidade com filtros simples.</p>
+        </div>
+        <div class="card">
+          <div class="icon">2</div>
+          <h3 style="margin:10px 0 6px">Inscreva-se</h3>
+          <p class="meta" style="margin:0">CTA claro, confirmação e mensagens de feedback em cada etapa.</p>
+        </div>
+        <div class="card">
+          <div class="icon">3</div>
+          <h3 style="margin:10px 0 6px">Acompanhe</h3>
+          <p class="meta" style="margin:0">Informações do evento, atualizações e histórico em um só lugar.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ORGANIZADORES -->
+    <section id="organizadores">
+      <div class="cta-box">
+        <div style="max-width:58ch">
+          <span class="tag blue">Para organizadores</span>
+          <h2 style="margin:10px 0 6px">Publique e gerencie eventos com mais controle</h2>
+          <p class="sub" style="margin:0">
+            Área dedicada para reduzir suporte, padronizar páginas e melhorar a experiência de inscrição.
+          </p>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap">
+          <a class="btn primary" href="#">Solicitar demonstração</a>
+          <a class="btn ghost" href="#">Ver benefícios</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq">
+      <div class="section-title">
+        <div>
+          <h2>Dúvidas frequentes</h2>
+          <p class="sub">Respostas rápidas aumentam confiança e reduzem mensagens no suporte.</p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <details>
+          <summary>Como faço minha inscrição?</summary>
+          <p>Escolha o evento, selecione a modalidade/categoria e finalize em poucos passos com confirmação ao final.</p>
+        </details>
+        <details>
+          <summary>Como encontro eventos por cidade?</summary>
+          <p>Use a busca do topo com cidade/região e filtre por mês e modalidade.</p>
+        </details>
+        <details>
+          <summary>Sou organizador — como publico um evento?</summary>
+          <p>A área “Organizadores” centraliza publicação, gestão de inscrições e comunicação com atletas.</p>
+        </details>
+        <details>
+          <summary>Onde vejo meus dados e histórico?</summary>
+          <p>A “Área do atleta” concentra inscrições, resultados e eventos salvos.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- CTA FINAL -->
+    <section>
+      <div class="cta-box">
+        <div style="max-width:62ch">
+          <h2 style="margin:0 0 6px">Pronto para aumentar inscrições com uma experiência mais clara?</h2>
+          <p class="sub" style="margin:0">Este é um conceito visual para apresentação — padronizado e focado em conversão.</p>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap">
+          <a class="btn cta" href="#eventos">Ver eventos</a>
+          <a class="btn ghost" href="#organizadores">Sou organizador</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="wrap" style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:center">
+      <div class="logo"><div class="mark"></div> YouMovin</div>
+      <div>© 2026 • Landing page (conceito de apresentação)</div>
+    </div>
+  </footer>
+</body>
+</html>

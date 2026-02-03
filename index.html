@@ -1,0 +1,1008 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YouMovin — Corridas, inscrições e impacto social</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        /* PALETA (verde, azul e marrom) */
+        --blue-0: #041017;
+        --blue-1: #06314a;
+        --blue-2: #0a5e8a;
+        --blue-3: #0b8ec7;
+
+        --green-1: #27c077;
+        --green-2: #12a862;
+
+        --brown-1: #b8742a;
+        --brown-2: #8a5520;
+
+        --paper: #f4f7fb;
+        --ink: rgba(255, 255, 255, 0.92);
+        --muted: rgba(255, 255, 255, 0.72);
+        --muted-2: rgba(255, 255, 255, 0.56);
+
+        /* UI */
+        --card: rgba(255, 255, 255, 0.06);
+        --card-2: rgba(255, 255, 255, 0.085);
+        --border: rgba(255, 255, 255, 0.12);
+        --shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+        --radius: 16px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { height: 100%; }
+      html { scroll-behavior: smooth; }
+
+      body {
+        margin: 0;
+        font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        background: radial-gradient(1200px 800px at 10% -10%, rgba(11, 142, 199, 0.18), transparent 55%),
+                    radial-gradient(900px 600px at 95% 10%, rgba(39, 192, 119, 0.15), transparent 60%),
+                    #0b0f14;
+        color: var(--ink);
+        line-height: 1.35;
+      }
+
+      a { color: inherit; }
+      .sr-only {
+        position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+        overflow: hidden; clip: rect(0,0,0,0); border: 0;
+      }
+
+      /* ====== LAYOUT ====== */
+      .wrap {
+        width: min(1180px, calc(100% - 40px));
+        margin: 0 auto;
+      }
+
+      /* ====== HEADER (fixo + mais limpo) ====== */
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        backdrop-filter: blur(12px);
+        background: linear-gradient(180deg, rgba(4,16,23,0.78), rgba(4,16,23,0.55));
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+      }
+
+      .topbar-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 14px 0;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        user-select: none;
+        text-decoration: none;
+      }
+
+      .mark {
+        width: 40px;
+        height: 40px;
+        position: relative;
+        filter: drop-shadow(0 10px 20px rgba(0,0,0,.35));
+      }
+
+      .mark::before,
+      .mark::after {
+        content: "";
+        position: absolute;
+        inset: 3px;
+        border-radius: 9px;
+      }
+
+      .mark::before {
+        background: linear-gradient(135deg, var(--green-1), var(--green-2));
+        clip-path: polygon(6% 26%, 62% 6%, 96% 22%, 42% 44%);
+      }
+
+      .mark::after {
+        background: linear-gradient(135deg, var(--brown-1), var(--brown-2));
+        clip-path: polygon(6% 62%, 62% 42%, 96% 58%, 42% 80%);
+        opacity: 0.98;
+      }
+
+      .brand strong {
+        font-weight: 900;
+        letter-spacing: 0.6px;
+        font-size: 18px;
+        line-height: 1;
+      }
+      .brand small {
+        display: block;
+        color: var(--muted-2);
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: 0.3px;
+        margin-top: 2px;
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        color: rgba(255,255,255,0.88);
+        font-size: 14px;
+        white-space: nowrap;
+      }
+
+      .nav a {
+        text-decoration: none;
+        padding: 8px 10px;
+        border-radius: 10px;
+        transition: background 0.2s ease, color 0.2s ease;
+      }
+
+      .nav a:hover { background: rgba(255,255,255,0.07); }
+      .nav a.active {
+        background: linear-gradient(90deg, rgba(39,192,119,0.20), rgba(11,142,199,0.14));
+        border: 1px solid rgba(39,192,119,0.22);
+        color: #fff;
+      }
+
+      .actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .btn {
+        appearance: none;
+        border: 1px solid rgba(255,255,255,0.12);
+        background: rgba(255,255,255,0.06);
+        color: var(--ink);
+        font-weight: 700;
+        font-size: 13px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: transform 0.08s ease, background 0.2s ease, border-color 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .btn:active { transform: translateY(1px); }
+      .btn:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.18); }
+
+      .btn-primary {
+        border: 1px solid rgba(39, 192, 119, 0.30);
+        background: linear-gradient(90deg, rgba(39,192,119,0.95), rgba(18,168,98,0.95));
+        color: rgba(6, 19, 27, 0.92);
+        box-shadow: 0 16px 34px rgba(18,168,98,0.16);
+      }
+      .btn-primary:hover {
+        background: linear-gradient(90deg, rgba(39,192,119,0.98), rgba(18,168,98,0.98));
+      }
+
+      .btn-outline {
+        border: 1px solid rgba(184, 116, 42, 0.30);
+        background: linear-gradient(90deg, rgba(184,116,42,0.16), rgba(138,85,32,0.10));
+      }
+
+      .icon {
+        width: 18px;
+        height: 18px;
+        display: inline-block;
+        border-radius: 6px;
+        background: rgba(255,255,255,0.12);
+        position: relative;
+      }
+      .icon.search::before {
+        content: "";
+        position: absolute;
+        width: 9px; height: 9px;
+        border: 2px solid rgba(255,255,255,0.82);
+        border-radius: 50%;
+        left: 4px; top: 4px;
+      }
+      .icon.search::after {
+        content: "";
+        position: absolute;
+        width: 8px; height: 2px;
+        background: rgba(255,255,255,0.82);
+        right: 2px; bottom: 3px;
+        transform: rotate(45deg);
+        border-radius: 2px;
+      }
+
+      .hamburger {
+        display: none;
+        padding: 10px 12px;
+      }
+
+      /* ====== MENU MOBILE ====== */
+      .mobile-sheet {
+        display: none;
+        border-top: 1px solid rgba(255,255,255,0.10);
+        background: rgba(4,16,23,0.80);
+      }
+      .mobile-sheet a {
+        display: block;
+        text-decoration: none;
+        padding: 14px 8px;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        color: rgba(255,255,255,0.90);
+      }
+      .mobile-sheet a:last-child { border-bottom: none; }
+
+      /* ====== HERO ====== */
+      .hero {
+        position: relative;
+        overflow: hidden;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: url("https://images.unsplash.com/photo-1530143311094-34d807799e8f?auto=format&fit=crop&fm=jpg&q=80&w=2400")
+          right center / cover no-repeat;
+        filter: contrast(1.02) saturate(1.03);
+        z-index: 0;
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(90deg, rgba(6,19,27,0.92) 0%, rgba(6,19,27,0.74) 42%, rgba(6,19,27,0.40) 100%),
+          radial-gradient(900px 600px at 15% 25%, rgba(11,142,199,0.30), transparent 60%),
+          radial-gradient(700px 520px at 30% 70%, rgba(39,192,119,0.22), transparent 62%);
+        z-index: 1;
+      }
+
+      .hero-inner {
+        position: relative;
+        z-index: 2;
+        padding: 42px 0 34px;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 26px;
+        align-items: start;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(39,192,119,0.20);
+        background: rgba(39,192,119,0.10);
+        color: rgba(255,255,255,0.88);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+      }
+      .badge i {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: linear-gradient(90deg, var(--green-1), var(--green-2));
+        box-shadow: 0 0 0 4px rgba(39,192,119,0.12);
+      }
+
+      .hero h1 {
+        margin: 14px 0 10px;
+        font-size: clamp(34px, 4vw, 54px);
+        line-height: 1.05;
+        letter-spacing: 0.4px;
+        font-weight: 900;
+      }
+
+      .hero p {
+        margin: 0;
+        max-width: 56ch;
+        color: rgba(255,255,255,0.74);
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .hero-ctas {
+        margin-top: 18px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .microcopy {
+        margin-top: 10px;
+        font-size: 12px;
+        color: rgba(255,255,255,0.64);
+      }
+      .microcopy b { color: rgba(255,255,255,0.86); }
+
+      /* ====== CARD HERO DIREITA (ações rápidas) ====== */
+      .panel {
+        border-radius: var(--radius);
+        background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.05));
+        border: 1px solid rgba(255,255,255,0.14);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+
+      .panel-head {
+        padding: 16px 16px 12px;
+        border-bottom: 1px solid rgba(255,255,255,0.10);
+        background:
+          linear-gradient(90deg, rgba(11,142,199,0.14), rgba(39,192,119,0.10));
+      }
+
+      .panel-head h2 {
+        margin: 0;
+        font-size: 14px;
+        letter-spacing: 0.2px;
+        font-weight: 900;
+      }
+
+      .panel-head p {
+        margin: 6px 0 0;
+        font-size: 12px;
+        color: rgba(255,255,255,0.70);
+        line-height: 1.45;
+      }
+
+      .panel-body {
+        padding: 14px 16px 16px;
+      }
+
+      .searchbox {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+
+      .input {
+        width: 100%;
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.12);
+        background: rgba(4,16,23,0.45);
+        color: rgba(255,255,255,0.92);
+        padding: 12px 12px;
+        font-size: 13px;
+        outline: none;
+      }
+      .input::placeholder { color: rgba(255,255,255,0.48); }
+      .input:focus {
+        border-color: rgba(11,142,199,0.40);
+        box-shadow: 0 0 0 4px rgba(11,142,199,0.14);
+      }
+
+      .quick-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .qa {
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 12px;
+        border-radius: 14px;
+        border: 1px solid rgba(255,255,255,0.12);
+        background: rgba(255,255,255,0.05);
+        transition: transform .08s ease, background .2s ease, border-color .2s ease;
+      }
+      .qa:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.18); }
+      .qa:active { transform: translateY(1px); }
+
+      .qa strong {
+        font-size: 13px;
+        font-weight: 900;
+        letter-spacing: 0.2px;
+      }
+      .qa span {
+        display: block;
+        font-size: 12px;
+        color: rgba(255,255,255,0.64);
+        margin-top: 2px;
+      }
+
+      .tag {
+        font-size: 11px;
+        font-weight: 900;
+        letter-spacing: 0.3px;
+        text-transform: uppercase;
+        padding: 8px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(255,255,255,0.14);
+        color: rgba(255,255,255,0.86);
+        background: rgba(4,16,23,0.32);
+      }
+
+      .tag.green { border-color: rgba(39,192,119,0.26); background: rgba(39,192,119,0.10); }
+      .tag.blue  { border-color: rgba(11,142,199,0.26); background: rgba(11,142,199,0.10); }
+      .tag.brown { border-color: rgba(184,116,42,0.28); background: rgba(184,116,42,0.10); }
+
+      /* ====== KPIs (impacto social) ====== */
+      .kpis {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 14px;
+      }
+
+      .kpi {
+        padding: 12px 12px;
+        border-radius: 14px;
+        background: rgba(255,255,255,0.045);
+        border: 1px solid rgba(255,255,255,0.10);
+      }
+
+      .kpi b {
+        display: block;
+        font-size: 16px;
+        letter-spacing: 0.2px;
+        font-weight: 900;
+      }
+
+      .kpi small {
+        display: block;
+        margin-top: 4px;
+        font-size: 11px;
+        color: rgba(255,255,255,0.62);
+        line-height: 1.3;
+      }
+
+      /* ====== SEÇÕES ====== */
+      section.block {
+        padding: 34px 0;
+      }
+
+      .block h2 {
+        margin: 0 0 10px;
+        font-size: 22px;
+        font-weight: 900;
+        letter-spacing: 0.2px;
+      }
+      .block p.lead {
+        margin: 0 0 16px;
+        color: rgba(255,255,255,0.70);
+        line-height: 1.6;
+        font-size: 14px;
+        max-width: 72ch;
+      }
+
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+      }
+
+      .card {
+        border-radius: var(--radius);
+        background: linear-gradient(180deg, rgba(255,255,255,0.075), rgba(255,255,255,0.045));
+        border: 1px solid rgba(255,255,255,0.12);
+        padding: 16px;
+        box-shadow: 0 12px 28px rgba(0,0,0,0.22);
+      }
+
+      .card .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 900;
+        letter-spacing: 0.3px;
+        text-transform: uppercase;
+        background: rgba(4,16,23,0.30);
+        border: 1px solid rgba(255,255,255,0.12);
+        color: rgba(255,255,255,0.88);
+      }
+
+      .pill.green { border-color: rgba(39,192,119,0.26); }
+      .pill.blue  { border-color: rgba(11,142,199,0.26); }
+      .pill.brown { border-color: rgba(184,116,42,0.28); }
+
+      .card h3 {
+        margin: 10px 0 6px;
+        font-size: 16px;
+        font-weight: 900;
+        letter-spacing: 0.2px;
+      }
+
+      .card p {
+        margin: 0;
+        color: rgba(255,255,255,0.70);
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      .card .cta-row {
+        margin-top: 12px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      /* ====== DEPOIMENTOS ====== */
+      .quotes {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 14px;
+        align-items: stretch;
+      }
+
+      .quote {
+        border-radius: var(--radius);
+        border: 1px solid rgba(255,255,255,0.12);
+        background: rgba(255,255,255,0.045);
+        padding: 16px;
+      }
+
+      .quote p {
+        margin: 0;
+        color: rgba(255,255,255,0.78);
+        font-size: 13px;
+        line-height: 1.65;
+      }
+
+      .quote footer {
+        margin-top: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        color: rgba(255,255,255,0.66);
+        font-size: 12px;
+      }
+
+      .divider {
+        height: 1px;
+        background: rgba(255,255,255,0.08);
+        margin: 0;
+        border: 0;
+      }
+
+      /* ====== FOOTER ====== */
+      footer.site {
+        padding: 26px 0 34px;
+        color: rgba(255,255,255,0.66);
+      }
+
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr 1fr;
+        gap: 14px;
+      }
+
+      .footer-grid h4 {
+        margin: 0 0 10px;
+        color: rgba(255,255,255,0.86);
+        font-size: 13px;
+        font-weight: 900;
+        letter-spacing: 0.2px;
+      }
+
+      .footer-grid a {
+        display: inline-block;
+        margin: 6px 0;
+        text-decoration: none;
+        color: rgba(255,255,255,0.66);
+      }
+      .footer-grid a:hover { color: rgba(255,255,255,0.86); }
+
+      /* ====== RESPONSIVO ====== */
+      @media (max-width: 980px) {
+        .hero-grid { grid-template-columns: 1fr; }
+        .kpis { grid-template-columns: repeat(3, 1fr); }
+        .grid-3 { grid-template-columns: 1fr; }
+        .quotes { grid-template-columns: 1fr; }
+        .nav { display: none; }
+        .hamburger { display: inline-flex; }
+      }
+
+      @media (max-width: 640px) {
+        .kpis { grid-template-columns: 1fr; }
+        .topbar-inner { gap: 10px; }
+        .actions .btn { padding: 10px 10px; }
+        .footer-grid { grid-template-columns: 1fr; }
+      }
+
+      /* ====== ACESSIBILIDADE: foco visível ====== */
+      :focus-visible {
+        outline: 0;
+        box-shadow: 0 0 0 4px rgba(11,142,199,0.22);
+        border-radius: 12px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div class="topbar">
+      <div class="wrap topbar-inner">
+        <a class="brand" href="#topo" aria-label="YouMovin - ir para o topo">
+          <span class="mark" aria-hidden="true"></span>
+          <span>
+            <strong>YouMovin</strong>
+            <small>corridas • inscrições • impacto social</small>
+          </span>
+        </a>
+
+        <!-- menu (reduzido: essencial para primeira visita) -->
+        <nav class="nav" aria-label="Menu principal">
+          <a class="active" href="#eventos">Eventos</a>
+          <a href="#para-atletas">Para atletas</a>
+          <a href="#para-organizadores">Para organizadores</a>
+          <a href="#impacto">Impacto</a>
+          <a href="#contato">Contato</a>
+        </nav>
+
+        <div class="actions">
+          <button class="btn hamburger" type="button" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu">
+            <span class="sr-only">Abrir menu</span>
+            ☰
+          </button>
+
+          <a class="btn btn-outline" href="#eventos">
+            <span class="icon search" aria-hidden="true"></span>
+            Buscar prova
+          </a>
+
+          <a class="btn btn-primary" href="#inscricoes">
+            Inscrever-se
+          </a>
+        </div>
+      </div>
+
+      <!-- MENU MOBILE -->
+      <div class="mobile-sheet" id="mobileMenu" aria-label="Menu mobile">
+        <div class="wrap">
+          <a href="#eventos">Eventos</a>
+          <a href="#para-atletas">Para atletas</a>
+          <a href="#para-organizadores">Para organizadores</a>
+          <a href="#impacto">Impacto</a>
+          <a href="#depoimentos">Depoimentos</a>
+          <a href="#contato">Contato</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <header class="hero" id="topo">
+      <div class="wrap hero-inner">
+        <div class="hero-grid">
+          <!-- TEXTO (claro + 1 CTA principal e 1 secundário) -->
+          <div>
+            <span class="badge"><i aria-hidden="true"></i> calendário e inscrições com propósito</span>
+
+            <h1>Encontre sua próxima corrida e apoie projetos sociais.</h1>
+
+            <p>
+              Descubra provas, acompanhe resultados e faça inscrições com facilidade.
+              Parte das taxas pode ser destinada a iniciativas de inclusão no esporte.
+            </p>
+
+            <div class="hero-ctas">
+              <a class="btn btn-primary" href="#eventos">Ver eventos</a>
+              <a class="btn btn-outline" href="#para-organizadores">Sou organizador</a>
+            </div>
+
+            <div class="microcopy">
+              Dica: comece pelo <b>calendário</b> e filtre por cidade, data ou distância.
+            </div>
+
+            <!-- KPIs (impacto social e confiança) -->
+            <div class="kpis" id="impacto">
+              <div class="kpi">
+                <b>R$ 17.758,12</b>
+                <small>Total acumulado para projetos e iniciativas parceiras</small>
+              </div>
+              <div class="kpi">
+                <b>Calendário</b>
+                <small>Encontre provas por cidade, data e categoria</small>
+              </div>
+              <div class="kpi">
+                <b>Inscrição segura</b>
+                <small>Fluxo simples com confirmação e suporte</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD DE AÇÕES RÁPIDAS (reduz “perdição” na primeira visita) -->
+          <aside class="panel" aria-label="Ações rápidas">
+            <div class="panel-head">
+              <h2>Comece por aqui</h2>
+              <p>Busque uma corrida e escolha o que você quer fazer agora.</p>
+            </div>
+
+            <div class="panel-body">
+              <form class="searchbox" id="eventSearch" role="search" aria-label="Buscar eventos">
+                <label class="sr-only" for="q">Buscar por cidade, prova ou distância</label>
+                <input
+                  class="input"
+                  id="q"
+                  name="q"
+                  placeholder="Ex: 10k, meia maratona, Curitiba..."
+                  autocomplete="off"
+                />
+                <button class="btn btn-primary" type="submit" aria-label="Buscar">
+                  Buscar
+                </button>
+              </form>
+
+              <div class="quick-actions">
+                <a class="qa" href="#inscricoes">
+                  <div>
+                    <strong>Inscrições</strong>
+                    <span>Faça sua inscrição em poucos passos</span>
+                  </div>
+                  <span class="tag green">atleta</span>
+                </a>
+
+                <a class="qa" href="#eventos">
+                  <div>
+                    <strong>Calendário de eventos</strong>
+                    <span>Veja o que tem nas próximas semanas</span>
+                  </div>
+                  <span class="tag blue">descobrir</span>
+                </a>
+
+                <a class="qa" href="#resultados">
+                  <div>
+                    <strong>Resultados</strong>
+                    <span>Confira classificações e tempos</span>
+                  </div>
+                  <span class="tag brown">pós-prova</span>
+                </a>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- SEÇÃO: Para Atletas (conteúdo progressivo em cards) -->
+      <section class="block" id="para-atletas">
+        <div class="wrap">
+          <h2>Para atletas</h2>
+          <p class="lead">
+            Três caminhos claros para você não se perder na primeira visita: achar corrida, se inscrever e ver resultados.
+          </p>
+
+          <div class="grid-3">
+            <article class="card" id="eventos">
+              <span class="pill blue">descobrir</span>
+              <h3>Encontre eventos rapidamente</h3>
+              <p>Use filtros por cidade, data, distância e modalidade para achar a prova ideal.</p>
+              <div class="cta-row">
+                <a class="btn btn-outline" href="#eventos">Abrir calendário</a>
+              </div>
+            </article>
+
+            <article class="card" id="inscricoes">
+              <span class="pill green">inscrição</span>
+              <h3>Inscrição simples e segura</h3>
+              <p>Fluxo focado no essencial: escolher evento, preencher dados e confirmar com transparência.</p>
+              <div class="cta-row">
+                <a class="btn btn-primary" href="#contato">Tirar dúvidas</a>
+                <a class="btn" href="#eventos">Ver eventos</a>
+              </div>
+            </article>
+
+            <article class="card" id="resultados">
+              <span class="pill brown">pós-prova</span>
+              <h3>Resultados em um só lugar</h3>
+              <p>Consulte resultados recentes e encontre sua classificação com facilidade.</p>
+              <div class="cta-row">
+                <a class="btn btn-outline" href="#resultados">Ver resultados</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <hr class="divider" />
+
+      <!-- SEÇÃO: Para Organizadores -->
+      <section class="block" id="para-organizadores">
+        <div class="wrap">
+          <h2>Para organizadores</h2>
+          <p class="lead">
+            Um caminho dedicado para organizadores: divulgação, publicação e apoio operacional — sem misturar tudo na home.
+          </p>
+
+          <div class="grid-3">
+            <article class="card">
+              <span class="pill green">divulgação</span>
+              <h3>Publicação gratuita</h3>
+              <p>Coloque seu evento no calendário e alcance atletas com mais visibilidade.</p>
+              <div class="cta-row">
+                <a class="btn btn-primary" href="#contato">Publicar evento</a>
+              </div>
+            </article>
+
+            <article class="card">
+              <span class="pill blue">gestão</span>
+              <h3>Gerencie inscrições</h3>
+              <p>Organize inscrições com suporte e estrutura preparada para eventos.</p>
+              <div class="cta-row">
+                <a class="btn btn-outline" href="#contato">Solicitar orçamento</a>
+              </div>
+            </article>
+
+            <article class="card">
+              <span class="pill brown">parcerias</span>
+              <h3>Fornecedores e apoio</h3>
+              <p>Conecte-se a parceiros e facilite a logística para o dia do evento.</p>
+              <div class="cta-row">
+                <a class="btn" href="#contato">Falar com a equipe</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <hr class="divider" />
+
+      <!-- DEPOIMENTOS (curto, sem repetição) -->
+      <section class="block" id="depoimentos">
+        <div class="wrap">
+          <h2>Depoimentos</h2>
+          <p class="lead">
+            Prova social mais enxuta: poucas frases fortes e um botão para ver mais.
+          </p>
+
+          <div class="quotes">
+            <figure class="quote">
+              <p>
+                “Encontro as melhores provas, faço minhas inscrições com segurança e ainda ajudo uma causa.
+                Tudo bem organizado e fácil de usar.”
+              </p>
+              <footer>
+                <span><b>Fabiano</b> — atleta</span>
+                <span class="tag blue">experiência</span>
+              </footer>
+            </figure>
+
+            <figure class="quote">
+              <p>
+                “Apoio desde o início: a plataforma ajuda na divulgação e fortalece inclusão no esporte.”
+              </p>
+              <footer>
+                <span><b>Fernando</b> — organizador</span>
+                <span class="tag green">parceria</span>
+              </footer>
+            </figure>
+          </div>
+
+          <div style="margin-top: 14px;">
+            <a class="btn btn-outline" href="#contato">Ver mais depoimentos</a>
+          </div>
+        </div>
+      </section>
+
+      <hr class="divider" />
+
+      <!-- CONTATO (CTA final) -->
+      <section class="block" id="contato">
+        <div class="wrap">
+          <h2>Fale com a gente</h2>
+          <p class="lead">
+            Deixe o caminho final claro: dúvidas de inscrição, publicação de evento ou parcerias.
+          </p>
+
+          <div class="grid-3">
+            <article class="card">
+              <span class="pill blue">atleta</span>
+              <h3>Dúvidas de inscrição</h3>
+              <p>Suporte para confirmação, pagamento e informações do evento.</p>
+              <div class="cta-row">
+                <a class="btn btn-primary" href="#">Chamar no WhatsApp</a>
+              </div>
+            </article>
+
+            <article class="card">
+              <span class="pill green">organizador</span>
+              <h3>Publicar evento</h3>
+              <p>Envie as informações e colocamos no calendário com o padrão correto.</p>
+              <div class="cta-row">
+                <a class="btn btn-outline" href="#">Enviar por e-mail</a>
+              </div>
+            </article>
+
+            <article class="card">
+              <span class="pill brown">parcerias</span>
+              <h3>Fornecedores</h3>
+              <p>Vamos conectar sua marca a eventos e comunidades de corrida.</p>
+              <div class="cta-row">
+                <a class="btn" href="#">Quero ser parceiro</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site">
+      <div class="wrap footer-grid">
+        <div>
+          <h4>YouMovin</h4>
+          <div style="color: rgba(255,255,255,0.62); font-size: 13px; line-height: 1.6;">
+            Plataforma de corridas com inscrições e calendário, conectando atletas, organizadores e impacto social.
+          </div>
+        </div>
+
+        <div>
+          <h4>Links úteis</h4>
+          <a href="#eventos">Calendário</a><br />
+          <a href="#inscricoes">Inscrições</a><br />
+          <a href="#resultados">Resultados</a>
+        </div>
+
+        <div>
+          <h4>Institucional</h4>
+          <a href="#impacto">Impacto</a><br />
+          <a href="#para-organizadores">Organizadores</a><br />
+          <a href="#contato">Contato</a>
+        </div>
+      </div>
+
+      <div class="wrap" style="margin-top: 16px; color: rgba(255,255,255,0.46); font-size: 12px;">
+        © 2026 YouMovin — UI refactor (demo)
+      </div>
+    </footer>
+
+    <script>
+      // Menu mobile
+      (function () {
+        const btn = document.getElementById("menuBtn");
+        const sheet = document.getElementById("mobileMenu");
+
+        function toggle() {
+          const open = btn.getAttribute("aria-expanded") === "true";
+          btn.setAttribute("aria-expanded", String(!open));
+          sheet.style.display = open ? "none" : "block";
+        }
+
+        btn?.addEventListener("click", toggle);
+
+        // Fecha ao clicar em link
+        sheet?.addEventListener("click", (e) => {
+          const a = e.target.closest("a");
+          if (!a) return;
+          btn.setAttribute("aria-expanded", "false");
+          sheet.style.display = "none";
+        });
+      })();
+
+      // Busca demo (não navega de verdade — só mostra o termo)
+      (function () {
+        const form = document.getElementById("eventSearch");
+        form?.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const q = new FormData(form).get("q");
+          alert("Busca (demo): " + (q || ""));
+        });
+      })();
+    </script>
+  </body>
+</html>
